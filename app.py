@@ -16,8 +16,9 @@ bot.
 import config
 import logging
 
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler, CallbackQueryHandler
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+import warranty as warranty_script
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -27,47 +28,53 @@ logger = logging.getLogger(__name__)
 
 token = config.token
 print('Bot started successfully.')
-TOOL_SELECT, WARRANTY, CONVERT_DATE, FILE = range(4)
+
+WARRANTY, CONVERT_DATE = range(2)
+import os
+
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
     """Send a message when the command /start is issued."""
     update.message.reply_text('Hi!')
 
-
-def help_command(update, context):
-    """Send a message when the command /help is issued."""
-    update.message.reply_text('Help!')
-
-
-def echo(update, context):
-    """Echo the user message."""
-    update.message.reply_text(update.message.text)
-
 def start_tool(update,context):
-    reply_keyboard = [['Get Warranty', 'Convert Dates']]
-
-    update.message.reply_text('Select tools to use', reply_markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
-    return TOOL_SELECT
+    #keyboard = [[InlineKeyboardButton('Get Warranty', callback_data='warranty'), InlineKeyboardButton('Convert Dates', callback_data='convert dates')]]
+    keyboard = [[InlineKeyboardButton('Get Warranty', callback_data='warranty')]]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    update.message.reply_text('Select tools to use', reply_markup = reply_markup)
+    return ConversationHandler.END
 
 def tool_select(update, context):
-    choice = update.message.text
-    print(choice)
-    if choice == 'Get Warranty':
-        update.message.reply_text('Please send me your excel file.')
+    query = update.callback_query
+    query.answer()
+    choice = query.data
+    if choice == 'warranty':
+        query.message.reply_text('Please send me your excel file.')
         return WARRANTY
-    elif choice == 'Convert Dates':
+    elif choice == 'convert dates':
         return CONVERT_DATE
     else:
-        update.message.reply_text('Error selecting choices')
+        query.message.reply_text('Error selecting choices')
+    return WARRANTY
 
 def warranty(update, context):
-    file = update.message.document.get_file().download()
-    update.message.reply_text('File sent successfully!')
+    file = update.message.document.get_file().download(custom_path='input.xlsx')
+    update.message.reply_text('File received successfully! \n'
+                              'Please wait while I process your spreadsheet.')
+    warranty_script.main()
+    update.message.reply_text('Your spreadsheet is ready!')
+    update.message.reply_document(document=open('result.xlsx', 'rb'))
+    os.remove('result.xlsx')
+    os.remove('input.xlsx')
+    return ConversationHandler.END
+
+def convert_dates(update, context):
+    print('test')
+    return ConversationHandler.END
 
 def cancel(update, context):
-    update.message.reply_text('Bye! I hope we can talk again some day.',
-                              reply_markup=ReplyKeyboardRemove())
+    update.message.reply_text('Bye! I hope we can talk again some day.')
 
     return ConversationHandler.END
 
@@ -82,11 +89,10 @@ def main():
     dp = updater.dispatcher
 
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler("start_tool", start_tool)],
+        entry_points=[CallbackQueryHandler(tool_select)],
         states={
-            TOOL_SELECT: [MessageHandler(Filters.text, tool_select)],
-            WARRANTY: [MessageHandler(Filters.text, warranty)],
-            #CONVERT_DATE: [MessageHandler(Filters.text, convert_date)],
+            WARRANTY: [MessageHandler(Filters.document.mime_type('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'), warranty)],
+            CONVERT_DATE: [MessageHandler(Filters.all, convert_dates)],
             #FILE: [MessageHandler(Filters.text, output_file)]
         },
         fallbacks=[CommandHandler("cancel", cancel)]
@@ -95,12 +101,9 @@ def main():
 
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("help", help_command))
-
-    # on noncommand i.e message - echo the message on Telegram
-    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
-
+    dp.add_handler(CommandHandler('startbot', start_tool))
     dp.add_handler(conv_handler)
+
     # Start the Bot
     updater.start_polling()
 

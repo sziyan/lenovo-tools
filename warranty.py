@@ -75,27 +75,27 @@ def generate_output(row):
         print('Unexpected error: {}'.format(e))
         return -2
 
-print('Starting warranty script..')
-wb = load_workbook(filename='Lenovo.xlsx')
-sheet = wb['Sample serial number']
+def main():
+    wb = load_workbook(filename='Lenovo.xlsx')
+    sheet = wb['Sample serial number']
 
-for row in sheet.iter_rows(max_col=3):
-    result = generate_output(row)
-    if result == 1:
-        pass
-    elif result == -1:    #IndexError during function run
-        print('{} - IndexError, retrying..'.format(row[0].value))
-        time.sleep(5)   #sleep 5 seconds before re-trying function call
-        result2 =generate_output(row)   #attempt to re-run function to get warranty
-        if result2 == -1:   #if still IndexError, will output to output file
-            print('{} - Index Error on 2nd try'.format(row[0].value))
-            row[2].value = 'Index Error'
-    elif result == -2:
-        print('{} - Unexpected Error'.format(row[0].value))
-        row[2].value = 'Unexpected Error'
-    else:
-        print('{} - This should not happen - Invalid error code'.format(row[0].value))
-        row[2].value = 'This should not happen - Invalid error code'
+    for row in sheet.iter_rows(max_col=3):
+        result = generate_output(row)
+        if result == 1:
+            pass
+        elif result == -1:    #IndexError during function run
+            print('{} - IndexError, retrying..'.format(row[0].value))
+            time.sleep(5)   #sleep 5 seconds before re-trying function call
+            result2 =generate_output(row)   #attempt to re-run function to get warranty
+            if result2 == -1:   #if still IndexError, will output to output file
+                print('{} - Index Error on 2nd try'.format(row[0].value))
+                row[2].value = 'Index Error'
+        elif result == -2:
+            print('{} - Unexpected Error'.format(row[0].value))
+            row[2].value = 'Unexpected Error'
+        else:
+            print('{} - This should not happen - Invalid error code'.format(row[0].value))
+            row[2].value = 'This should not happen - Invalid error code'
 
-wb.save('result.xlsx')
-print('Output created..')
+    wb.save('result.xlsx')
+    print('Output created..')
