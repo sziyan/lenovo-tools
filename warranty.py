@@ -86,8 +86,12 @@ def main(chat_id):
     bot.send_message(chat_id=chat_id,text='Rows detected: {}'.format(num_rows))
     for row in sheet.iter_rows(max_col=3):
         index = int(row[0].row)
-        result = generate_output(row)
-        if index % 10 == 0 :
+        if row[0].value == '':
+            result = 0
+        else:
+            result = generate_output(row)
+
+        if index % 50 == 0 :
             bot.send_message(chat_id=chat_id, text='Processing {}/{}'.format(index, num_rows))
         if result == 1:
             pass
@@ -101,6 +105,8 @@ def main(chat_id):
         elif result == -2:
             print('{} - Unexpected Error'.format(row[0].value))
             row[2].value = 'Unexpected Error'
+        elif result == 0:
+            pass
         else:
             print('{} - This should not happen - Invalid error code'.format(row[0].value))
             row[2].value = 'This should not happen - Invalid error code'
