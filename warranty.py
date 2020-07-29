@@ -76,7 +76,7 @@ def generate_output(row):
         return -2
 
 def main():
-    wb = load_workbook(filename='Lenovo.xlsx')
+    wb = load_workbook(filename='input.xlsx')
     sheet = wb['Sample serial number']
 
     for row in sheet.iter_rows(max_col=3):
