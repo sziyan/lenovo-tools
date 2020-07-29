@@ -5,6 +5,8 @@ import json
 from openpyxl import load_workbook
 from datetime import datetime
 import time
+from telegram import Bot
+import config
 
 #links
 # url_l490 = 'https://pcsupport.lenovo.com/us/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l490-type-20q5-20q6/20q6/20q6cto1ww/{}/warranty'.format(serial)
@@ -16,6 +18,8 @@ import time
 # url_x280 = 'https://pcsupport.lenovo.com/us/en/products/laptops-and-netbooks/thinkpad-x-series-laptops/thinkpad-x280-type-20kf-20ke/20ke/20kesbu300/{}/warranty'.format(serial)
 # url_x390 = 'https://pcsupport.lenovo.com/us/en/products/laptops-and-netbooks/thinkpad-x-series-laptops/thinkpad-x390/20q1/20q1cto1ww/{}/warranty'.format(serial)
 # url_l480 = 'https://pcsupport.lenovo.com/us/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l480-type-20ls-20lt/20lt/20ltcto1ww/{}/warranty'.format(serial)
+
+bot = Bot(token=config.token)
 
 def get_url(model, serial):
     if model.lower() == 'thinkpad e14':
@@ -75,12 +79,16 @@ def generate_output(row):
         print('Unexpected error: {}'.format(e))
         return -2
 
-def main():
+def main(chat_id):
     wb = load_workbook(filename='input.xlsx')
     sheet = wb['Sample serial number']
-
+    num_rows = len(sheet['A'])
+    bot.send_message(chat_id=chat_id,text='Rows detected: {}'.format(num_rows))
     for row in sheet.iter_rows(max_col=3):
+        index = int(row[0].row)
         result = generate_output(row)
+        if index % 10 == 0 :
+            bot.send_message(chat_id=chat_id, text='Processing {}/{}'.format(index, num_rows))
         if result == 1:
             pass
         elif result == -1:    #IndexError during function run

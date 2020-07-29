@@ -59,10 +59,11 @@ def tool_select(update, context):
     return WARRANTY
 
 def warranty(update, context):
+    chat_id = update.message.chat_id
     file = update.message.document.get_file().download(custom_path='input.xlsx')
     update.message.reply_text('File received successfully! \n'
                               'Please wait while I process your spreadsheet.')
-    warranty_script.main()
+    warranty_script.main(chat_id)
     update.message.reply_text('Your spreadsheet is ready!')
     update.message.reply_document(document=open('result.xlsx', 'rb'))
     os.remove('result.xlsx')
