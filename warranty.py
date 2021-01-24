@@ -40,7 +40,7 @@ def get_warranty(url):
     r = requests.get(url)
     data = r.text
     soup = BeautifulSoup(data, 'html.parser')
-    script = soup.find_all('script')[18].string
+    script = soup.find_all('script')[20].string
     x = re.findall('var ds_warranties = window.ds_warranties \|\| ({[\w\W]+});', script)[0]
     js = json.loads(x)
     warranty = js.get('BaseUpmaWarranties')[0].get('End')
@@ -53,7 +53,7 @@ def format_date(date_str):
 
 def generate_output(row):
     try:
-        serial = row[0].value
+        serial = row[0].value.strip()
         model = row[1].value
         url = get_url(model, serial)
         if url == -1:
@@ -65,7 +65,7 @@ def generate_output(row):
             row[2].value = output_date
             print('{} - {}'.format(serial, output_date))
         return 1
-    except IndexError:
+    except IndexError as e:
         return -1
     except Exception as e:
         print('Unexpected error: {}'.format(e))

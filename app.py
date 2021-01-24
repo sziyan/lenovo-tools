@@ -19,6 +19,7 @@ import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler, CallbackQueryHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 import warranty as warranty_script
+import random
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -68,10 +69,13 @@ def warranty(update, context):
     update.message.reply_document(document=open('result.xlsx', 'rb'))
     os.remove('result.xlsx')
     os.remove('input.xlsx')
+    encouragement_list = ['Are you sleepy yet?', 'Aiseh doing work ah?', 'Talk to me if you bored ', 'Dont forget I am always here for you.', 'Jiayou Jiayou', 'I love you oh']
+    random_int = random.randint(0, len(encouragement_list)-1)   #generate random integers
+    encouragement_reply_text = encouragement_list[random_int] #select random text from encouragement list to send
+    update.message.reply_text(encouragement_reply_text) #send encouragement text
     return ConversationHandler.END
 
 def convert_dates(update, context):
-    print('test')
     return ConversationHandler.END
 
 def cancel(update, context):
