@@ -40,7 +40,7 @@ def get_warranty(url):
     r = requests.get(url)
     data = r.text
     soup = BeautifulSoup(data, 'html.parser')
-    script = soup.find_all('script')[21].string
+    script = soup.find_all('script')[22].string
     x = re.findall('var ds_warranties = window.ds_warranties \|\| ({[\w\W]+});', script)[0]
     js = json.loads(x)
     warranty = js.get('BaseUpmaWarranties')[0].get('End')
