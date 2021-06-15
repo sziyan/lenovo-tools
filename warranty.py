@@ -32,6 +32,8 @@ def get_url(model, serial):
         url = 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-x-series-laptops/thinkpad-x390/20q1/20q1cto1ww/{}/warranty'.format(serial)
     elif model.lower() == 'thinkpad l14':
         url = 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l14-type-20u1-20u2/20u2/20u2cto1ww/{}/warranty'.format(serial)
+    elif model.lower() == 'thinkpad x13':
+        url = 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-x-series-laptops/thinkpad-x13-type-20t2-20t3/20t3/20t3cto1ww/{}/warranty'.format(serial)
     else:
         url = -1
     return url

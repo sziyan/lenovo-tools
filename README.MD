@@ -14,6 +14,7 @@ Currently supports the following laptop models:
 - Thinkpad X280
 - Thinkpad X390
 - Thinkpad L14
+- Thinkpad X13
 
 ## To-do
 
