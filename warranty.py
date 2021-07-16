@@ -7,9 +7,14 @@ from datetime import datetime
 import time
 from telegram import Bot
 import config
+import logging
+
+
 
 
 bot = Bot(token=config.token)
+logging.basicConfig(level=logging.INFO, filename='output.log', filemode='a', format='%(asctime)s %(levelname)s - %(message)s', datefmt='%d-%b-%y %I:%M:%S %p')
+
 
 def get_url(model, serial):
     if model.lower() == 'thinkpad e14':
@@ -42,10 +47,17 @@ def get_warranty(url):
     r = requests.get(url)
     data = r.text
     soup = BeautifulSoup(data, 'html.parser')
-    script = soup.find_all('script')[22].string
-    x = re.findall('var ds_warranties = window.ds_warranties \|\| ({[\w\W]+});', script)[0]
-    js = json.loads(x)
-    warranty = js.get('BaseUpmaWarranties')[0].get('End')
+    script = soup.find_all('script')
+    for sr in script:
+        try:
+            if 'var ds_warranties' in sr.string:
+                warranty_string = sr.string
+                ds_warranties = re.findall('window.ds_warranties \|\| ({[\w\W]+});', warranty_string)[0]
+                js = json.loads(ds_warranties)
+                warranty = js.get('BaseUpmaWarranties')[0].get('End')
+                break
+        except:
+            pass
     return warranty
 
 def format_date(date_str):
@@ -77,18 +89,25 @@ def main(chat_id):
     wb = load_workbook(filename='input.xlsx')
     sheet = wb['Sample serial number']
     num_rows = len(sheet['A'])
+    logging.info('Received input of {} rows.'.format(num_rows))
     bot.send_message(chat_id=chat_id,text='Rows detected: {}'.format(num_rows))
+    noError = 0
+    noSuccess = 0
+    # set how often a notification of the rows being processed is shown. If more then 300 rows, will notify every 100 rows, else every 50 rows  
+    if num_rows > 300:
+        process_noti = 100
+    else:
+        process_noti = 50
     for row in sheet.iter_rows(max_col=3):
         index = int(row[0].row)
         if row[0].value == '':
             result = 0
         else:
             result = generate_output(row)
-
-        if index % 50 == 0 :
+        if index % process_noti == 0 : #output message every 50 rows
             bot.send_message(chat_id=chat_id, text='Processing {}/{}'.format(index, num_rows))
         if result == 1:
-            pass
+            noSuccess+=1
         elif result == -1:    #IndexError during function run
             print('{} - IndexError, retrying..'.format(row[0].value))
             time.sleep(5)   #sleep 5 seconds before re-trying function call
@@ -96,14 +115,22 @@ def main(chat_id):
             if result2 == -1:   #if still IndexError, will output to output file
                 print('{} - Index Error on 2nd try'.format(row[0].value))
                 row[2].value = 'Index Error'
+                logging.error('{} index error after 2nd try'.format(row[0].value))
+                noError+=1
         elif result == -2:
             print('{} - Unexpected Error'.format(row[0].value))
             row[2].value = 'Unexpected Error'
+            logging.error('{} - Unexpected Error'.format(row[0].value))
+            noError+=1
         elif result == 0:
             pass
         else:
             print('{} - This should not happen - Invalid error code'.format(row[0].value))
             row[2].value = 'This should not happen - Invalid error code'
+            logging.error('{} - This should not happen'.format(row[0].value))
 
     wb.save('result.xlsx')
     print('Output created..')
+    resultSummary = 'Success: {}    Error: {}'.format(noSuccess, noError)
+    logging.info(resultSummary)
+    bot.send_message(chat_id=chat_id, text = resultSummary)

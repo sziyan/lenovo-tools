@@ -22,14 +22,15 @@ import warranty as warranty_script
 import random
 
 # Enable logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
-
+logging.basicConfig(level=logging.INFO, filename='output.log', filemode='a', format='%(asctime)s %(levelname)s - %(message)s', datefmt='%d-%b-%y %I:%M:%S %p')
+# logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+#                     level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 token = config.token
 bot = Bot(token=config.token)
+
 print('Bot started successfully.')
+logging.info('Bot started successfully.')
 
 WARRANTY = range(1)
 import os
@@ -41,12 +42,12 @@ def start(update, context):
     update.message.reply_text('Hi! Type /startbot to initiate request!')
 
 def ask_input(update, context):
-    update.message.reply_text("Please send me your excel file. /cancel to cancel.")
+    update.message.reply_text("Please send me your excel file for processing. /cancel to cancel.")
     return WARRANTY
 
 def warranty(update, context):
     chat_id = update.message.chat_id
-    mytext = 'Baby used bot.'
+    mytext = 'Lenovo bot completed processing successfully.'
     file = update.message.document.get_file().download(custom_path='input.xlsx')
     update.message.reply_text('File received successfully! \n'
                               'Please wait while I process your spreadsheet.')
@@ -58,6 +59,9 @@ def warranty(update, context):
     os.remove('input.xlsx')
     return ConversationHandler.END
 
+def template(update, context):
+    update.message.reply_text('Please use below template for me to process.')
+    update.message.reply_document(document=open('Lenovo.xlsx', 'rb'))
 
 def timeout(update, context):
     update.message.reply_text('Request timed out! /startbot to initiate request again.')
@@ -89,6 +93,7 @@ def main():
 
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler('template', template))
     dp.add_handler(conv_handler)
 
     # Start the Bot

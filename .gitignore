@@ -2,3 +2,6 @@ venv/
 config.py
 .idea/
 workspace.code-workspace
+output.log
+__pycache__/
+.vscode
