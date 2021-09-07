@@ -12,25 +12,35 @@ Basic Echobot example, repeats messages.
 Press Ctrl-C on the command line or send a signal to the process to stop the
 bot.
 """
-
-import config
+try:
+    import config
+except:
+    pass
 import logging
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
 from telegram import Bot
 import warranty as warranty_script
-import random
+import os
 
 # Enable logging
 logging.basicConfig(level=logging.INFO, filename='output.log', filemode='a', format='%(asctime)s %(levelname)s - %(message)s', datefmt='%d-%b-%y %I:%M:%S %p')
 # logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
 #                     level=logging.INFO)
 logger = logging.getLogger(__name__)
-token = config.token
-bot = Bot(token=config.token)
+try:
+    token = config.token
+    mychat_id = config.mychat_id
+except:
+    token = os.environ.get('TOKEN')
+    mychat_id = os.environ.get('MYCHAT_ID')
+
+bot = Bot(token=token)
 
 print('Bot started successfully.')
 logging.info('Bot started successfully.')
+bot.send_message(chat_id=mychat_id,text="Bot started successfully")
+
 
 WARRANTY = range(1)
 import os
@@ -54,7 +64,7 @@ def warranty(update, context):
     warranty_script.main(chat_id)
     update.message.reply_text('Your spreadsheet is ready!')
     update.message.reply_document(document=open('result.xlsx', 'rb'))
-    bot.send_message(chat_id=config.mychat_id,text=mytext)
+    bot.send_message(chat_id=mychat_id,text=mytext)
     os.remove('result.xlsx')
     os.remove('input.xlsx')
     return ConversationHandler.END

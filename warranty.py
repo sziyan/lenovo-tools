@@ -6,13 +6,21 @@ from openpyxl import load_workbook
 from datetime import datetime
 import time
 from telegram import Bot
-import config
+
 import logging
+import os
 
+try:
+    import config
+except:
+    pass
 
+try:
+    token = config.token
+except:
+    token = os.environ.get('TOKEN')
 
-
-bot = Bot(token=config.token)
+bot = Bot(token=token)
 logging.basicConfig(level=logging.INFO, filename='output.log', filemode='a', format='%(asctime)s %(levelname)s - %(message)s', datefmt='%d-%b-%y %I:%M:%S %p')
 
 

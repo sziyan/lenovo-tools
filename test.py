@@ -36,22 +36,19 @@ url = 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad
 #         pass
 
 
-def get_warranty(url):
-    r = requests.get(url)
-    data = r.text
-    soup = BeautifulSoup(data, 'html.parser')
-    script = soup.find_all('script')
-    for sr in script:
-        try:
-            if 'var ds_warranties' in sr.string:
-                warranty_string = sr.string
-                ds_warranties = re.findall('window.ds_warranties \|\| ({[\w\W]+});', warranty_string)[0]
-                js = json.loads(ds_warranties)
-                warranty = js.get('BaseUpmaWarranties')[0].get('End')
-                break
-        except:
-            warranty = 'Unable to find warranty date'
-    return warranty
-
-myw = get_warranty(url)
-print(myw)
+# def get_warranty(url):
+#     r = requests.get(url)
+#     data = r.text
+#     soup = BeautifulSoup(data, 'html.parser')
+#     script = soup.find_all('script')
+#     for sr in script:
+#         try:
+#             if 'var ds_warranties' in sr.string:
+#                 warranty_string = sr.string
+#                 ds_warranties = re.findall('window.ds_warranties \|\| ({[\w\W]+});', warranty_string)[0]
+#                 js = json.loads(ds_warranties)
+#                 warranty = js.get('BaseUpmaWarranties')[0].get('End')
+#                 break
+#         except:
+#             warranty = 'Unable to find warranty date'
+#     return warranty
