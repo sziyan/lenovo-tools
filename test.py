@@ -7,9 +7,50 @@ from datetime import datetime
 import time
 from telegram import Bot
 import config
+import warranty
+import urllib
+import urllib3
+import requests
 
-serial = 'PF2KM0VZ'   
-url = 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l14-type-20u1-20u2/20u2/20u2cto1ww/{}/warranty'.format(serial)
+# serial = 'R913795V'   
+# model = 'thinkpad l13'
+# url = warranty.get_url(serial=serial, model=model)
+# warranty_date = warranty.get_warranty(url)
+
+# print(warranty_date)
+
+serial = 'NXEG8SG00K1480014C0201'
+#serial = 'sdjfskjfsd'
+model = 'acer'
+url = 'http://support.acer.com.sg/support/checkwarrantyresults.asp'
+
+formData = {
+    '__VIEWSTATE': 'wEPDwUJNDA4Mzc4NTUxZGQazEtBaHJpnK06W95ZaNAwjHPGdC3C2rmOWwCv9qkuBw==',
+    'pserialno': serial
+}
+
+r = requests.post(url, data = formData)
+data = r.text
+soup = BeautifulSoup(data, 'html.parser')
+row = soup.find_all('td')
+
+for i in range(len(row)):
+    try:
+        if row[i].strong.text == 'Onsite Expiry:':
+            unformatted_warranty_date = row[i+1].text
+            unformatted = datetime.strptime(unformatted_warranty_date, '%d %B, %Y')
+            warranty = unformatted.strftime('%d %b %Y')
+            break
+    except:
+        warranty = 'Error'
+
+print(warranty)
+
+
+
+
+#url = 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l14-type-20u1-20u2/20u2/20u2cto1ww/{}/warranty'.format(serial)
+
 
 # r = requests.get(url)
 # data = r.text

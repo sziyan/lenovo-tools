@@ -26,30 +26,32 @@ logging.basicConfig(level=logging.INFO, filename='output.log', filemode='a', for
 
 def get_url(model, serial):
     if model.lower() == 'thinkpad e14':
-        url = 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-edge-laptops/thinkpad-e14-type-20ra-20rb/20ra/20ra003ssg/{}/warranty'.format(serial)
+        brand, url = 'lenovo', 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-edge-laptops/thinkpad-e14-type-20ra-20rb/20ra/20ra003ssg/{}/warranty'.format(serial)
     elif model.lower() == 'thinkpad e490':
-        url = 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-edge-laptops/thinkpad-e490-type-20n8-20n9/20n8/20n8005psg/{}/warranty'.format(serial)
+        brand, url = 'lenovo', 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-edge-laptops/thinkpad-e490-type-20n8-20n9/20n8/20n8005psg/{}/warranty'.format(serial)
     elif model.lower() == 'thinkpad l13':
-        url = 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l13-type-20r3-20r4/20r4/20r4s5ta00/{}/warranty'.format(serial)
+        brand, url = 'lenovo', 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l13-type-20r3-20r4/20r4/20r4s5ta00/{}/warranty'.format(serial)
     elif model.lower() == 'thinkpad l380':
-        url = 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l380-type-20m5-20m6/20m6/20m6cto1ww/{}/warranty'.format(serial)
+        brand, url = 'lenovo', 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l380-type-20m5-20m6/20m6/20m6cto1ww/{}/warranty'.format(serial)
     elif model.lower() == 'thinkpad l390':
-        url = 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l390-type-20nr-20ns/20ns/20nscto1ww/{}/warranty'.format(serial)
+        brand, url = 'lenovo', 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l390-type-20nr-20ns/20ns/20nscto1ww/{}/warranty'.format(serial)
     elif model.lower() == 'thinkpad l480':
-        url = 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l480-type-20ls-20lt/20lt/20ltcto1ww/{}/warranty'.format(serial)
+        brand, url = 'lenovo', 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l480-type-20ls-20lt/20lt/20ltcto1ww/{}/warranty'.format(serial)
     elif model.lower() == 'thinkpad l490':
-        url = 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l490-type-20q5-20q6/20q6/20q6cto1ww/{}/warranty'.format(serial)
+        brand, url = 'lenovo', 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l490-type-20q5-20q6/20q6/20q6cto1ww/{}/warranty'.format(serial)
     elif model.lower() == 'thinkpad x280':
-        url = 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-x-series-laptops/thinkpad-x280-type-20kf-20ke/20ke/20kesbu300/{}/warranty'.format(serial)
+        brand, url = 'lenovo', 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-x-series-laptops/thinkpad-x280-type-20kf-20ke/20ke/20kesbu300/{}/warranty'.format(serial)
     elif model.lower() == 'thinkpad x390':
-        url = 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-x-series-laptops/thinkpad-x390/20q1/20q1cto1ww/{}/warranty'.format(serial)
+        brand, url = 'lenovo', 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-x-series-laptops/thinkpad-x390/20q1/20q1cto1ww/{}/warranty'.format(serial)
     elif model.lower() == 'thinkpad l14':
-        url = 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l14-type-20u1-20u2/20u2/20u2cto1ww/{}/warranty'.format(serial)
+        brand, url = 'lenovo', 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l14-type-20u1-20u2/20u2/20u2cto1ww/{}/warranty'.format(serial)
     elif model.lower() == 'thinkpad x13':
-        url = 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-x-series-laptops/thinkpad-x13-type-20t2-20t3/20t3/20t3cto1ww/{}/warranty'.format(serial)
+        brand, url = 'lenovo', 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-x-series-laptops/thinkpad-x13-type-20t2-20t3/20t3/20t3cto1ww/{}/warranty'.format(serial)
+    elif model.lower() == 'acer':
+        brand, url = 'acer', 'http://support.acer.com.sg/support/checkwarrantyresults.asp'
     else:
-        url = -1
-    return url
+        brand, url = -1, -1
+    return brand, url
 
 def get_warranty(url):
     r = requests.get(url)
@@ -68,22 +70,55 @@ def get_warranty(url):
             pass
     return warranty
 
-def format_date(date_str):
-    unformatted = datetime.strptime(date_str,'%Y-%m-%d')
-    formatted_date = unformatted.strftime('%d %b %Y')
-    return formatted_date
+def get_acer_warranty(serial):
+    url = 'http://support.acer.com.sg/support/checkwarrantyresults.asp'
+    formData = {
+        '__VIEWSTATE': 'wEPDwUJNDA4Mzc4NTUxZGQazEtBaHJpnK06W95ZaNAwjHPGdC3C2rmOWwCv9qkuBw==',
+        'pserialno': serial
+    }
+
+    r = requests.post(url, data = formData)
+    data = r.text
+    soup = BeautifulSoup(data, 'html.parser')
+    row = soup.find_all('td')
+    for i in range(len(row)):
+        try:
+            if row[i].strong.text == 'Onsite Expiry:': #take date of onsite expiry as warranty end date
+                warranty = row[i+1].text
+                break
+        except:
+            warranty = 'Error'
+    return warranty
+
+def format_date(brand, date_str):
+    try:
+        if brand == 'lenovo':
+            unformatted = datetime.strptime(date_str,'%Y-%m-%d')
+            formatted_date = unformatted.strftime('%d %b %Y')
+        else:
+            unformatted = datetime.strptime(date_str, '%d %B, %Y')
+            formatted_date = unformatted.strftime('%d %b %Y')
+        return formatted_date
+    except ValueError:
+        logging.error('{} does not contain a valid date format'.format(date_str))
+        return 'Invalid date format'
 
 def generate_output(row):
     try:
         serial = row[0].value.strip()
         model = row[1].value
-        url = get_url(model, serial)
-        if url == -1:
+        brand, url = get_url(model, serial)
+        if url == -1 or brand == -1:
             row[2].value = 'Cannot find model'
             print('{} - Cannot find model'.format(serial))
-        else:
+        elif brand == 'lenovo':
             warranty_date = get_warranty(url)
-            output_date = format_date(warranty_date)
+            output_date = format_date(brand, warranty_date)
+            row[2].value = output_date
+            print('{} - {}'.format(serial, output_date))
+        else: #acer brand
+            warranty_date = get_acer_warranty(serial)
+            output_date = format_date(brand, warranty_date)
             row[2].value = output_date
             print('{} - {}'.format(serial, output_date))
         return 1
