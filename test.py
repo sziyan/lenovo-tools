@@ -12,39 +12,42 @@ import urllib
 import urllib3
 import requests
 
-# serial = 'R913795V'   
-# model = 'thinkpad l13'
-# url = warranty.get_url(serial=serial, model=model)
-# warranty_date = warranty.get_warranty(url)
 
-# print(warranty_date)
 
-serial = 'NXEG8SG00K1480014C0201'
-#serial = 'sdjfskjfsd'
-model = 'acer'
-url = 'http://support.acer.com.sg/support/checkwarrantyresults.asp'
+serial = 'PF2TA4M2'   
+model = 'ThinkPad X13 G2'
+brand, url = warranty.get_url(serial=serial, model=model)
+print(url)
+warranty_date = warranty.get_warranty(url)
 
-formData = {
-    '__VIEWSTATE': 'wEPDwUJNDA4Mzc4NTUxZGQazEtBaHJpnK06W95ZaNAwjHPGdC3C2rmOWwCv9qkuBw==',
-    'pserialno': serial
-}
+print(warranty_date)
 
-r = requests.post(url, data = formData)
-data = r.text
-soup = BeautifulSoup(data, 'html.parser')
-row = soup.find_all('td')
+# serial = 'NXEG8SG00K1480014C0201'
+# #serial = 'sdjfskjfsd'
+# model = 'acer'
+# url = 'http://support.acer.com.sg/support/checkwarrantyresults.asp'
 
-for i in range(len(row)):
-    try:
-        if row[i].strong.text == 'Onsite Expiry:':
-            unformatted_warranty_date = row[i+1].text
-            unformatted = datetime.strptime(unformatted_warranty_date, '%d %B, %Y')
-            warranty = unformatted.strftime('%d %b %Y')
-            break
-    except:
-        warranty = 'Error'
+# formData = {
+#     '__VIEWSTATE': 'wEPDwUJNDA4Mzc4NTUxZGQazEtBaHJpnK06W95ZaNAwjHPGdC3C2rmOWwCv9qkuBw==',
+#     'pserialno': serial
+# }
 
-print(warranty)
+# r = requests.post(url, data = formData)
+# data = r.text
+# soup = BeautifulSoup(data, 'html.parser')
+# row = soup.find_all('td')
+
+# for i in range(len(row)):
+#     try:
+#         if row[i].strong.text == 'Onsite Expiry:':
+#             unformatted_warranty_date = row[i+1].text
+#             unformatted = datetime.strptime(unformatted_warranty_date, '%d %B, %Y')
+#             warranty = unformatted.strftime('%d %b %Y')
+#             break
+#     except:
+#         warranty = 'Error'
+
+# print(warranty)
 
 
 

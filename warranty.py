@@ -47,6 +47,10 @@ def get_url(model, serial):
         brand, url = 'lenovo', 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l14-type-20u1-20u2/20u2/20u2cto1ww/{}/warranty'.format(serial)
     elif model.lower() == 'thinkpad x13':
         brand, url = 'lenovo', 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-x-series-laptops/thinkpad-x13-type-20t2-20t3/20t3/20t3cto1ww/{}/warranty'.format(serial)
+    elif model.lower() == 'thinkbook 13s g2':
+        brand, url = 'lenovo', 'https://pcsupport.lenovo.com/us/en/products/laptops-and-netbooks/thinkbook-series/thinkbook-13s-g2-itl/20v9/20v9005ksb/{}/warranty'.format(serial)
+    elif model.lower() == 'thinkpad x13 g2':
+        brand, url = 'lenovo', 'https://pcsupport.lenovo.com/us/en/products/laptops-and-netbooks/thinkpad-x-series-laptops/thinkpad-x13-yoga-gen-2-type-20wk-20wl/20wl/20wls10p00/{}/warranty'.format(serial)
     elif model.lower() == 'acer':
         brand, url = 'acer', 'http://support.acer.com.sg/support/checkwarrantyresults.asp'
     else:
