@@ -105,7 +105,7 @@ def get_acer_warranty(serial):
                 warranty = row[i+1].text
                 break
         except:
-            warranty = 'Error'
+            warranty = -1 #error or page not found
     return warranty
 
 def format_date(brand, date_str):
@@ -136,7 +136,12 @@ def generate_output(row):
             print('{} - {}'.format(serial, output_date))
         else: #acer brand
             warranty_date = get_acer_warranty(serial)
-            output_date = format_date(brand, warranty_date)
+            if warranty_date == -1:
+                output_date = 'Not Found'
+            elif warranty_date.lower() == 'not valid': #warranty page returns Not Valid which most likely is expired
+                output_date = 'Expired'
+            else:
+                output_date = format_date(brand, warranty_date)
             row[2].value = output_date
             print('{} - {}'.format(serial, output_date))
         return 1
@@ -148,8 +153,11 @@ def generate_output(row):
 
 def main(chat_id):
     wb = load_workbook(filename='input.xlsx')
-    sheet = wb['Sample serial number']
-    num_rows = len(sheet['A'])
+    list_of_sheetnames = wb.sheetnames
+    #sheet = wb['Sample serial number']
+    first_sheet_name = list_of_sheetnames[0] #get the name of 1st sheet
+    sheet = wb[first_sheet_name] #set it to sheet variable for openpyxl to work on it
+    num_rows = len(sheet['A']) -1 #to factor in top row which serves as title
     logging.info('Received input of {} rows.'.format(num_rows))
     bot.send_message(chat_id=chat_id,text='Rows detected: {}'.format(num_rows))
     noError = 0
@@ -159,8 +167,8 @@ def main(chat_id):
         process_noti = 100
     else:
         process_noti = 50
-    for row in sheet.iter_rows(max_col=3):
-        index = int(row[0].row)
+    for row in sheet.iter_rows(min_row=2, max_col=3):
+        index = int(row[0].row) - 1 # the row that it is currently on. Minus 1 to factor in top row which serves as title
         if row[0].value == '':
             result = 0
         else:

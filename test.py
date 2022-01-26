@@ -17,10 +17,11 @@ import requests
 # serial = 'R90QH3GL'   
 # model = 'thinkpad l380'
 
-serial = 'R90YQRK7'   
-model = 'thinkpad l13'
+serial = 'NXVD4SG005724190607600'   
+model = 'acer'
 brand, url = warranty.get_url(serial=serial, model=model)
-warranty_date = warranty.get_warranty(url)
+#warranty_date = warranty.get_warranty(url)
+warranty_date = warranty.get_acer_warranty(serial)
 
 print(warranty_date)
 
