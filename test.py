@@ -14,10 +14,12 @@ import requests
 
 
 
-serial = 'PF2TA4M2'   
-model = 'ThinkPad X13 G2'
+# serial = 'R90QH3GL'   
+# model = 'thinkpad l380'
+
+serial = 'R90YQRK7'   
+model = 'thinkpad l13'
 brand, url = warranty.get_url(serial=serial, model=model)
-print(url)
 warranty_date = warranty.get_warranty(url)
 
 print(warranty_date)

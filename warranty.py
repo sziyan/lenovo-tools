@@ -1,3 +1,4 @@
+#from msilib.schema import Error
 import requests
 from bs4 import BeautifulSoup
 import re
@@ -30,7 +31,7 @@ def get_url(model, serial):
     elif model.lower() == 'thinkpad e490':
         brand, url = 'lenovo', 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-edge-laptops/thinkpad-e490-type-20n8-20n9/20n8/20n8005psg/{}/warranty'.format(serial)
     elif model.lower() == 'thinkpad l13':
-        brand, url = 'lenovo', 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l13-type-20r3-20r4/20r4/20r4s5ta00/{}/warranty'.format(serial)
+        brand, url = 'lenovo', ['https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l13-type-20r3-20r4/20r3/20r3000vsg/{}/warranty'.format(serial), 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l13-type-20r3-20r4/20r4/20r4cto1ww/{}/warranty'.format(serial)]
     elif model.lower() == 'thinkpad l380':
         brand, url = 'lenovo', 'https://pcsupport.lenovo.com/sg/en/products/laptops-and-netbooks/thinkpad-l-series-laptops/thinkpad-l380-type-20m5-20m6/20m6/20m6cto1ww/{}/warranty'.format(serial)
     elif model.lower() == 'thinkpad l390':
@@ -58,6 +59,16 @@ def get_url(model, serial):
     return brand, url
 
 def get_warranty(url):
+    if isinstance(url, list) is False: #not a list
+        warranty = lenovo_bs4(url)
+    else:
+        for warrantyurl in url: #multiple url provided. Go thru list to make sure warranty url returns valid warranty date
+            warranty = lenovo_bs4(warrantyurl)
+            if  warranty != -1:
+                break
+    return warranty          
+
+def lenovo_bs4(url):
     r = requests.get(url)
     data = r.text
     soup = BeautifulSoup(data, 'html.parser')
@@ -70,9 +81,12 @@ def get_warranty(url):
                 js = json.loads(ds_warranties)
                 warranty = js.get('BaseUpmaWarranties')[0].get('End')
                 break
-        except:
+            else:
+                warranty = -1
+        except TypeError:
             pass
     return warranty
+    
 
 def get_acer_warranty(serial):
     url = 'http://support.acer.com.sg/support/checkwarrantyresults.asp'
