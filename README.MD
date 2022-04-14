@@ -15,11 +15,14 @@ Currently supports the following laptop models:
 - Thinkpad X390
 - Thinkpad L14
 - Thinkpad X13
+- Thinkbook 13s G2
+- Thinkpad X13 G2
+- Acer
 
 ## To-do
 
 Upcoming features that might or might not happen.
 
-- Change interval output chat response depending on the number of rows detected
-- Errors output to log file
+[x] Change interval output chat response depending on the number of rows detected
+[x] Errors output to log file
 
