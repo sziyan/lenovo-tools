@@ -19,6 +19,13 @@ Currently supports the following laptop models:
 - Thinkpad X13 G2
 - Acer
 
+## Configuration
+Set the following 2 environment variables:
+- TOKEN
+- CHAT_ID
+
+Above variables can be retrieved from Telegram Botfather
+
 ## To-do
 
 Upcoming features that might or might not happen.

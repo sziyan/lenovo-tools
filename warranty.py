@@ -17,9 +17,9 @@ except:
     pass
 
 try:
-    token = config.token
-except:
     token = os.environ.get('TOKEN')
+except:
+    print('TOKEN is not set!')
 
 bot = Bot(token=token)
 logging.basicConfig(level=logging.INFO, filename='output.log', filemode='a', format='%(asctime)s %(levelname)s - %(message)s', datefmt='%d-%b-%y %I:%M:%S %p')

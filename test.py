@@ -1,29 +1,32 @@
-import requests
-from bs4 import BeautifulSoup
-import re
-import json
-from openpyxl import load_workbook
-from datetime import datetime
-import time
-from telegram import Bot
-import config
-import warranty
-import urllib
-import urllib3
-import requests
+# import requests
+# from bs4 import BeautifulSoup
+# import re
+# import json
+# from openpyxl import load_workbook
+# from datetime import datetime
+# import time
+# from telegram import Bot
+# import config
+# import warranty
+# import urllib
+# import urllib3
+# import requests
+import os
 
+test = os.environ.get('TEST')
+print(test)
 
 
 # serial = 'R90QH3GL'   
 # model = 'thinkpad l380'
 
-serial = 'NXVD4SG005724190607600'   
-model = 'acer'
-brand, url = warranty.get_url(serial=serial, model=model)
-#warranty_date = warranty.get_warranty(url)
-warranty_date = warranty.get_acer_warranty(serial)
+# serial = 'NXVD4SG005724190607600'   
+# model = 'acer'
+# brand, url = warranty.get_url(serial=serial, model=model)
+# #warranty_date = warranty.get_warranty(url)
+# warranty_date = warranty.get_acer_warranty(serial)
 
-print(warranty_date)
+# print(warranty_date)
 
 # serial = 'NXEG8SG00K1480014C0201'
 # #serial = 'sdjfskjfsd'
