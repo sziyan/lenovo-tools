@@ -12,10 +12,6 @@ Basic Echobot example, repeats messages.
 Press Ctrl-C on the command line or send a signal to the process to stop the
 bot.
 """
-try:
-    import config
-except:
-    pass
 import logging
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
@@ -29,11 +25,10 @@ logging.basicConfig(level=logging.INFO, filename='output.log', filemode='a', for
 #                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 try:
-    token = config.token
-    mychat_id = config.mychat_id
-except:
     token = os.environ.get('TOKEN')
-    mychat_id = os.environ.get('MYCHAT_ID')
+    mychat_id = os.environ.get('CHAT_ID')
+except:
+    print('Either TOKEN or CHAT_ID is not set!')
 
 bot = Bot(token=token)
 
